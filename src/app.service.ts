@@ -8,9 +8,11 @@ export class AppService {
 
   constructor(@InjectKnex() private readonly knex: Knex) { }
 
-  public async getBusInfo(busId: number) {
+  public async getBusInfo(busId: number, date: Date) {
     if (!busId) return 'ERR_NO_BUS_ID'
-    const busGPSStrings = await this.knex.select('*').from('test_atlas').where({ ident: busId }).whereNot({ lat: '' }).andWhereNot({ lon: '' }).orderBy('device_timestamp')
+    if (!date) return 'ERR_NO_DATE'
+    console.log(date)
+    const busGPSStrings = await this.knex.select('*').from('test_atlas').where({ ident: busId }).whereNot({ lat: '' }).andWhereNot({ lon: '' }).andWhere('device_timestamp', 'like', `%${date}%`).orderBy('device_timestamp')
     let totalDistance: number = 0;
     let lastElement;
     busGPSStrings.forEach((element, index) => {
