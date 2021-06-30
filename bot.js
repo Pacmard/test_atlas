@@ -4,10 +4,19 @@ const bot = new TelegramBot(token, {polling: true});
 const axios = require('axios')
 
 bot.onText(/\/echo (.+)/, async (msg, match) => {
-
+  console.log(match)
   const chatId = msg.chat.id
-  const bus = match[1]; 
-  const res = await axios.get(`http://localhost:4010/getBusInfo/${bus}`)
+  const params = match[1].split(' ')
+  const bus = params[0]; 
+  if (!bus) {
+    bot.sendMessage(chatId, 'Error: no bus ID');
+  }
+  const dateReq = params[1]
+  console.log(params)
+  if (!dateReq) {
+    bot.sendMessage(chatId, 'Error: no date');
+  }
+  const res = await axios.get(`http://localhost:4010/getBusInfo/${bus}/${dateReq}`)
   var date = new Date(null);
   const seconds = res.data.time/1000
   console.log(res)
