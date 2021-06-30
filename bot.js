@@ -4,7 +4,6 @@ const bot = new TelegramBot(token, {polling: true});
 const axios = require('axios')
 
 bot.onText(/\/echo (.+)/, async (msg, match) => {
-  console.log(match)
   const chatId = msg.chat.id
   const params = match[1].split(' ')
   const bus = params[0]; 
@@ -12,7 +11,6 @@ bot.onText(/\/echo (.+)/, async (msg, match) => {
     bot.sendMessage(chatId, 'Error: no bus ID');
   }
   const dateReq = params[1]
-  console.log(params)
   if (!dateReq) {
     bot.sendMessage(chatId, 'Error: no date');
   }
